@@ -1,4 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 *{
   margin: 0;
   padding: 0;
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+}
+
+/* Width and height of the scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 12px;
+}
+
+/* Background of the scrollbar */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle of the scrollbar */
+::-webkit-scrollbar-thumb {
+  background: #172554;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Optional: corner for the scrollbar on both axes */
+::-webkit-scrollbar-corner {
+  background: #f1f1f1;
 }

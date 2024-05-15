@@ -1,8 +1,10 @@
 import React from 'react'
-
+import UserLayout from './container/UserLayout'
 const App = () => {
   return (
-    <div>App</div>
+    <div>
+      <UserLayout/>
+    </div>
   )
 }
 
