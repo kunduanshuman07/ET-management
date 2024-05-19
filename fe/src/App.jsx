@@ -1,10 +1,13 @@
 import React from 'react'
-import UserLayout from './container/UserLayout'
+import RoutesJs from './Routes'
+import { AuthProvider } from './context/AuthContext'
+
 const App = () => {
   return (
-    <div>
-      <UserLayout/>
-    </div>
+    <AuthProvider>
+      <RoutesJs />
+    </AuthProvider>
+
   )
 }
 

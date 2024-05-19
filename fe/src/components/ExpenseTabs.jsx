@@ -16,8 +16,16 @@ export default function ExpenseTabs() {
                 >
                     <Tabs>
                         <Tab
-                            label="My Expenses"
+                            label="Pending Expenses"
                             sx={{textTransform: "none", color: "#172554", borderBottom: "3px solid #dc2626" }}
+                        />
+                        <Tab
+                            label="Approved Expenses"
+                            sx={{textTransform: "none", color: "#172554" }}
+                        />
+                        <Tab
+                            label="Rejected Expenses"
+                            sx={{textTransform: "none", color: "#172554" }}
                         />
                     </Tabs>
                 </Toolbar>

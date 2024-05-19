@@ -5,10 +5,15 @@ import RecommendIcon from '@mui/icons-material/Recommend';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import PendingIcon from '@mui/icons-material/Pending';
 import ExpenseTabs from './ExpenseTabs';
+import { useNavigate } from 'react-router-dom';
 const ExpenseHeader = () => {
+    const navigate = useNavigate();
+    const handleNewExpense = () => {
+        navigate('/expense/new-expense');
+    }
     return (
         <Box sx={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
-            <Button startIcon={<AddIcon />} sx={{ textTransform: "none", backgroundColor: "#172554", color: "white", marginLeft: "auto" }} variant='contained'>New Expense</Button>
+            <Button startIcon={<AddIcon />} sx={{ textTransform: "none", backgroundColor: "#172554", color: "white", marginLeft: "auto" }} variant='contained' onClick={handleNewExpense}>New Expense</Button>
             <Grid container sx={{ marginBottom: "20px", marginTop: "10px" }} spacing={2}>
                 <Grid item xs={12} lg={4}>
                     <Card>

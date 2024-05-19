@@ -5,14 +5,16 @@ import { Routes, Route } from "react-router-dom";
 import ExpensePage from "../pages/ExpensePage";
 import TimeSheetPage from "../pages/TimeSheetPage"
 import DrawerComponent from '../components/DrawerComponent';
+import AddNewExpensePage from '../pages/AddNewExpensePage';
 const UserLayout = () => {
     return (
         <Box sx={{ display: "flex", flexDirection: "column" }}>
             <AppBarComponent />
             <DrawerComponent/>
-            <Box component="main" sx={{marginTop: "90px", marginLeft: "150px", width: "87.5%"}}>
+            <Box component="main" sx={{marginTop: "90px", marginLeft: "150px", width: "87.5%", padding: "10px 0px 20px 0px"}}>
                 <Routes>
                     <Route path='/expense' element={<ExpensePage/>}/>
+                    <Route path='/expense/new-expense' element={<AddNewExpensePage/>}/>
                     <Route path='/timesheet' element={<TimeSheetPage/>}/>
                 </Routes>
             </Box>
