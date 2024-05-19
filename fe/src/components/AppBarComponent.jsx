@@ -8,6 +8,7 @@ import {useAuth} from "../context/AuthContext"
 import {useNavigate} from "react-router-dom";
 
 const AppBarComponent = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
   const {setAuth} = useAuth();
   const navigate = useNavigate();
 
@@ -44,9 +45,10 @@ const AppBarComponent = () => {
               sheet
             </Typography>
           </Box>
+            <Typography sx={{marginRight: "10px", color: "#172554"}}>Hi, {user.name}</Typography>
           <div>
             <IconButton sx={{ p: 0, cursor: "pointer" }} onClick={handleMenu}>
-              <Avatar alt="Remy Sharp" src="xyz" />
+              <Avatar alt={user?.name} src="xyz" />
             </IconButton>
             <Menu
               id="menu-appbar"

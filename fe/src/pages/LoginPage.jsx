@@ -24,7 +24,7 @@ const LoginPage = () => {
       const loginResp = await axios.post(`http://localhost:5000/etsheet/auth/login`, { email, password });
       if (loginResp.status === 200) {
         localStorage.setItem("authToken", loginResp.data.token);
-        localStorage.setItem("user", loginResp.data.user);
+        localStorage.setItem("user", JSON.stringify(loginResp.data.user));
         setAuth(true);
         navigate('/expense');
       }
@@ -85,7 +85,7 @@ const LoginPage = () => {
         />
 
         <Button sx={{
-          background: "#172554", color: "white", margin: "40px auto", padding: "10px 50px", ":hover": {
+          background: "#172554", color: "white", margin: "40px auto 10px auto", padding: "10px 50px", ":hover": {
             background: "#1e40af"
           }
         }} onClick={handleLogin}>

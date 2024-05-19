@@ -6,7 +6,7 @@ import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import PendingIcon from '@mui/icons-material/Pending';
 import ExpenseTabs from './ExpenseTabs';
 import { useNavigate } from 'react-router-dom';
-const ExpenseHeader = () => {
+const ExpenseHeader = ({approved, rejected, pending, tabState, setTabState}) => {
     const navigate = useNavigate();
     const handleNewExpense = () => {
         navigate('/expense/new-expense');
@@ -26,7 +26,7 @@ const ExpenseHeader = () => {
                                     Approved Expenses
                                 </Typography>
                                 <Typography sx={{ fontSize: "40px", color: "black", marginLeft: "auto" }}>
-                                    0
+                                    {approved}
                                 </Typography>
                             </Box>
                         </Box>
@@ -43,7 +43,7 @@ const ExpenseHeader = () => {
                                     Pending Expenses
                                 </Typography>
                                 <Typography sx={{ fontSize: "40px", color: "black", marginLeft: "auto" }}>
-                                    0
+                                    {pending}
                                 </Typography>
                             </Box>
                         </Box>
@@ -60,14 +60,14 @@ const ExpenseHeader = () => {
                                     Rejected Expenses
                                 </Typography>
                                 <Typography sx={{ fontSize: "40px", color: "black", marginLeft: "auto" }}>
-                                    0
+                                    {rejected}
                                 </Typography>
                             </Box>
                         </Box>
                     </Card>
                 </Grid>
             </Grid>
-            <ExpenseTabs />
+            <ExpenseTabs tabState={tabState} setTabState={setTabState}/>
         </Box>
     )
 }

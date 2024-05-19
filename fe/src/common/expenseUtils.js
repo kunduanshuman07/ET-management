@@ -36,7 +36,8 @@ const categories = [
 ];
 
 const currency = [
-    { id: 1, title: "INR" }
+    { id: 1, title: "$" },
+    { id: 2, title: "INR" },
 ]
 
 const paymentMethod = [
@@ -45,4 +46,19 @@ const paymentMethod = [
     { id: 3, title: "Cheque" }
 ]
 
-export { purposes, categories, currency, paymentMethod };
+
+const projects = [
+    { projectCode: "20001", projectName: "Project Alpha" },
+    { projectCode: "20002", projectName: "Project Beta" },
+    { projectCode: "20003", projectName: "Project Gamma" },
+    { projectCode: "20004", projectName: "Project Delta" },
+    { projectCode: "20005", projectName: "Project Epsilon" },
+    { projectCode: "20006", projectName: "Project Zeta" },
+    { projectCode: "20007", projectName: "Project Eta" },
+    { projectCode: "20008", projectName: "Project Theta" },
+    { projectCode: "20009", projectName: "Project Iota" },
+    { projectCode: "20010", projectName: "Project Kappa" }
+];
+
+
+export { purposes, categories, currency, paymentMethod, projects };

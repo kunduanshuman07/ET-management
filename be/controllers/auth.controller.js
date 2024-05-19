@@ -20,20 +20,18 @@ export const login = async (req, res) => {
         const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
         res.status(200).json({ token, user });
     } catch (error) {
-        res.status(200).json({ message: "Error Logging In because of ", error });
+        res.status(500).json({ message: "Error Logging In because of ", error });
     }
 }
 
 export const register = async (req,res) => {
-    const { email, password, name } = req.body;
+    const { email, password, name, employeeCode, managerId, employeeId, entity, role, projectCode } = req.body;
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ email, password: hashedPassword, role: 'Employee', name });
+        const newUser = new User({ email, password: hashedPassword, name, employeeCode, managerId, employeeId, entity, role, projectCode });
         await newUser.save();
-        const user = await User.findOne({ email });
-        const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
-        res.status(200).json({ token, user });
+        res.status(200).json({ user: newUser });
     } catch (error) {
-        res.status(200).json({ message: "Error Registering because of ", error });
+        res.status(500).json({ message: "Error Registering because of ", error });
     }
 }

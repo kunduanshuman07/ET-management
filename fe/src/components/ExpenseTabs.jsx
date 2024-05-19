@@ -4,7 +4,8 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import { Tab, Tabs } from '@mui/material';
 
-export default function ExpenseTabs() {
+const ExpenseTabs = ({ tabState, setTabState }) => {
+    const user = JSON.parse(localStorage.getItem("user"));
     return (
         <Box sx={{ flexGrow: 1, marginTop: "10px" }}>
             <AppBar position="static" sx={{ height: "45px", backgroundColor: "white", padding: "0px" }}>
@@ -16,20 +17,23 @@ export default function ExpenseTabs() {
                 >
                     <Tabs>
                         <Tab
-                            label="Pending Expenses"
-                            sx={{textTransform: "none", color: "#172554", borderBottom: "3px solid #dc2626" }}
+                            onClick={()=>setTabState('My Expenses')}
+                            label="My Expenses"
+                            sx={{ textTransform: "none", color: "#172554", borderBottom: tabState === 'My Expenses' ? "3px solid #dc2626" : '' }}
                         />
-                        <Tab
-                            label="Approved Expenses"
-                            sx={{textTransform: "none", color: "#172554" }}
-                        />
-                        <Tab
-                            label="Rejected Expenses"
-                            sx={{textTransform: "none", color: "#172554" }}
-                        />
+                        {user.role === 'manager' &&
+                            <Tab
+                                onClick={()=>setTabState('Team Expenses')}
+                                label="My Team Approvals"
+                                sx={{ textTransform: "none", color: "#172554", borderBottom: tabState === 'Team Expenses' ? "3px solid #dc2626" : '' }}
+                            />
+                        }
                     </Tabs>
                 </Toolbar>
             </AppBar>
         </Box>
     );
 }
+
+
+export default ExpenseTabs

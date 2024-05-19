@@ -5,6 +5,20 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    employeeId: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    employeeCode: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    entity: {
+        type: String,
+        default: '$',
+    },
     email: {
         type: String,
         required: true,
@@ -15,15 +29,17 @@ const userSchema = new mongoose.Schema({
         required: true,
         min: 6,
     },
-    role: {
-        type: String,
-        // Options can be Employee, Manager, Senior Manager, Director, Senior Director
-        // Every user is an employee having their managers except the CEO who does not raise any expense.
-    },
     managerId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        default: null
+        type: String,
+        required: true,
+    },
+    projectCode: {
+        type: String,
+        required: true,
+    },
+    role: {
+        type: String, 
+        default: "Employee",
     }
 })
 
