@@ -6,30 +6,104 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { purposes, categories, currency, paymentMethod, projects } from "../common/expenseUtils";
 import CloseIcon from "@mui/icons-material/Close"
 import { useNavigate } from 'react-router-dom';
-const AddNewExpensePage = () => {
+const AddNewExpensePage = ({ details }) => {
     const user = JSON.parse(localStorage.getItem("user"));
     const navigate = useNavigate();
-    const [purposeData, setPurposeData] = useState();
-    const [categoryData, setCategoryData] = useState();
-    const [currencyType, setCurrencyType] = useState(user?.entity);
-    const [paymentType, setPaymentType] = useState();
-    const [expenseName, setExpenseName] = useState('');
-    const [claimAmount, setClaimAmount] = useState(0);
-    const [billAmount, setBillAmount] = useState(0);
-    const [invoiceDate, setInvoiceDate] = useState();
-    const [projectData, setProjectData] = useState();
+    const errorInit = {
+        purpose: false,
+        category: false,
+        paymentType: false,
+        expenseName: false,
+        claim: false,
+        bill: false,
+        project: false,
+        invoice: false,
+    }
+    const [purposeData, setPurposeData] = useState(details?.purpose || '');
+    const [categoryData, setCategoryData] = useState(details?.category || '');
+    const [currencyType, setCurrencyType] = useState(details?.currency || user?.entity);
+    const [paymentType, setPaymentType] = useState(details?.paymethod || '');
+    const [expenseName, setExpenseName] = useState(details?.name || '');
+    const [claimAmount, setClaimAmount] = useState(details?.claim || 0);
+    const [billAmount, setBillAmount] = useState(details?.bill || 0);
+    const [invoiceDate, setInvoiceDate] = useState(details?.invDate || '');
+    const [projectData, setProjectData] = useState(details?.projectCode || '');
     const [declaration, setDeclaration] = useState(false);
     const [loginErrorMessage, setLoginErrorMessage] = useState();
     const [snackOpen, setSnackOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [errorObj, setErrorObj] = useState(errorInit);
+    const [errorMessage, setErrorMessage] = useState();
     const handleClose = () => {
         setSnackOpen(false);
     }
-    const handleAddExpense = async () => {
+    const handleExpenseValidation = () => {
+        let isValid = true;
+        const errors = { ...errorInit }
+        if (!purposeData) {
+            isValid = false;
+            errors.purpose = true;
+        }
+        if (!categoryData) {
+            isValid = false;
+            errors.category = true;
+        }
+        if (!expenseName) {
+            isValid = false;
+            errors.expenseName = true;
+        }
+        if (!invoiceDate) {
+            isValid = false;
+            errors.invoice = true;
+        }
+        if (!billAmount) {
+            isValid = false;
+            errors.bill = true;
+        }
+        if (!claimAmount) {
+            isValid = false;
+            errors.claim = true;
+        }
+        if (!paymentType) {
+            isValid = false;
+            errors.paymentType = true;
+        }
+        if (!projectData) {
+            isValid = false;
+            errors.project = true;
+        }
+        setErrorObj(errors);
+        if (isValid) {
+            if (claimAmount > billAmount) {
+                setErrorMessage("Claim amount cannot be larger than bill amount.")
+            }
+            else if(details) {
+                setErrorMessage();
+                handleEditExpense();
+            }
+            else{
+                setErrorMessage();
+                handleAddExpense();
+            }
+        }
+    }
+    const handleEditExpense = async () => {
+        try {
+            setLoading(true);
+            const expenseResponse = await axios.post('http://localhost:5000/etsheet/expense/update-expense', { expenseId: details?.expenseId, name: expenseName, purpose: purposeData, category: categoryData, invDate: invoiceDate, currency: currencyType, bill: billAmount, claim: claimAmount, paymethod: paymentType, projectCode: user?.projectCode, status: "Pending" });
+            if (expenseResponse.status === 200) {
+                navigate('/expense');
+            }
+        } catch (error) {
+            setLoading(false);
+            setSnackOpen(true);
+            setLoginErrorMessage(error?.response?.data?.message || error?.message);
+        }
+    }
+    const handleAddExpense = async() => {
         try {
             setLoading(true);
             const expenseResponse = await axios.post('http://localhost:5000/etsheet/expense/add-expense', { name: expenseName, purpose: purposeData, category: categoryData, invDate: invoiceDate, currency: currencyType, bill: billAmount, claim: claimAmount, paymethod: paymentType, projectCode: user?.projectCode, employeeId: user?.employeeId, approvalManagerId: user?.managerId });
-            console.log(expenseResponse);
             if (expenseResponse.status === 200) {
                 navigate('/expense');
             }
@@ -46,7 +120,7 @@ const AddNewExpensePage = () => {
     );
     return (
         <div style={{ display: "flex", flexDirection: "column" }}>
-            <CommonHeader title={'Add New Expense'} navigator={'/expense'} />
+            <CommonHeader title={details ? 'Edit Expense' : 'Add New Expense'} navigator={'/expense'} />
             <Snackbar
                 open={snackOpen}
                 onClose={handleClose}
@@ -59,6 +133,8 @@ const AddNewExpensePage = () => {
                     <TextField
                         label='Purpose'
                         required
+                        error={errorObj?.purpose}
+                        helperText={errorObj?.purpose ? 'Required Field' : ""}
                         select
                         variant='outlined'
                         fullWidth
@@ -78,6 +154,8 @@ const AddNewExpensePage = () => {
                         label='Category'
                         required
                         select
+                        error={errorObj?.category}
+                        helperText={errorObj?.category ? 'Required Field' : ""}
                         variant='outlined'
                         fullWidth
                         type='text'
@@ -85,7 +163,7 @@ const AddNewExpensePage = () => {
                         onChange={(e) => setCategoryData(e.target.value)}
                     >
                         {categories?.map((category, index) => (
-                            purposeData === category.purposeId &&
+                            (purposeData === category.purposeId || details) &&
                             <MenuItem key={index} value={category.categoryId}>
                                 {category.title}
                             </MenuItem>
@@ -97,6 +175,8 @@ const AddNewExpensePage = () => {
                         label='Expense Name'
                         required
                         variant='outlined'
+                        error={errorObj?.expenseName}
+                        helperText={errorObj?.expenseName ? 'Required Field' : ""}
                         fullWidth
                         type='text'
                         value={expenseName}
@@ -110,6 +190,8 @@ const AddNewExpensePage = () => {
                         variant='outlined'
                         fullWidth
                         type='date'
+                        error={errorObj?.invoice}
+                        helperText={errorObj?.invoice ? 'Required Field' : ""}
                         value={invoiceDate}
                         onChange={(e) => setInvoiceDate(e.target.value)}
                     />
@@ -137,6 +219,8 @@ const AddNewExpensePage = () => {
                         label='Bill Amount'
                         required
                         variant='outlined'
+                        error={errorObj?.bill}
+                        helperText={errorObj?.bill ? 'Required Field' : ""}
                         fullWidth
                         value={billAmount}
                         onChange={(e) => setBillAmount(e.target.value)}
@@ -147,6 +231,8 @@ const AddNewExpensePage = () => {
                         label='Claim Amount'
                         required
                         variant='outlined'
+                        error={errorObj?.claim || errorMessage}
+                        helperText={errorObj?.claim ? 'Required Field' : errorMessage ? errorMessage : ""}
                         fullWidth
                         value={claimAmount}
                         onChange={(e) => setClaimAmount(e.target.value)}
@@ -158,6 +244,8 @@ const AddNewExpensePage = () => {
                         required
                         select
                         variant='outlined'
+                        error={errorObj?.paymentType}
+                        helperText={errorObj?.paymentType ? 'Required Field' : ""}
                         fullWidth
                         type='text'
                         value={paymentType}
@@ -176,6 +264,8 @@ const AddNewExpensePage = () => {
                         required
                         variant='outlined'
                         fullWidth
+                        error={errorObj?.project}
+                        helperText={errorObj?.project ? 'Required Field' : ""}
                         type='text'
                         select
                         value={projectData}
@@ -216,7 +306,7 @@ const AddNewExpensePage = () => {
             </Grid>
             <Box sx={{ display: "flex", marginLeft: "auto", marginBottom: "20px" }}>
                 <Button sx={{ textTransform: "none", color: "#172554", marginRight: "20px" }} disabled={!declaration} variant='outlined'>Save</Button>
-                <Button sx={{ textTransform: "none", backgroundColor: "#172554", color: "white" }} disabled={!declaration} variant='contained' onClick={handleAddExpense}>
+                <Button sx={{ textTransform: "none", backgroundColor: "#172554", color: "white" }} disabled={!declaration} variant='contained' onClick={handleExpenseValidation}>
                     {loading ?
                         <CircularProgress sx={{ color: "white" }} size={20} />
                         :

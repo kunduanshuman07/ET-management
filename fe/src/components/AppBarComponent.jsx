@@ -45,7 +45,7 @@ const AppBarComponent = () => {
               sheet
             </Typography>
           </Box>
-            <Typography sx={{marginRight: "10px", color: "#172554"}}>Hi, {user.name}</Typography>
+            <Typography sx={{marginRight: "10px", color: "#172554"}}>Hi,</Typography>
           <div>
             <IconButton sx={{ p: 0, cursor: "pointer" }} onClick={handleMenu}>
               <Avatar alt={user?.name} src="xyz" />

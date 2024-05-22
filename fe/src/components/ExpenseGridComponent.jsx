@@ -1,46 +1,18 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
-const columns = [
-  { field: 'id', headerName: 'ID', flex: 0.5 },
-  {
-    field: 'category',
-    headerName: 'Category',
-    flex: 1,
-    editable: false,
-  },
-  {
-    field: 'name',
-    headerName: 'Name',
-    flex: 1,
-    editable: false,
-  },
-  {
-    field: 'invDate',
-    headerName: 'Created At',
-    flex: 1,
-    editable: false,
-  },
-  {
-    field: 'claim',
-    headerName: 'Claim Amount',
-    flex: 1,
-    editable: false,
-  },
-  {
-    field: 'status',
-    headerName: 'Status',
-    flex: 1,
-    editable: false,
-  },
-
-];
+import { myExpense, teamApproval } from '../common/tableColumns';
+import { useNavigate } from 'react-router-dom';
 const ExpenseGridComponent = ({rows, teamrows, tabState}) => {
+  const navigate = useNavigate();
+  const handleRowClick = (rowData) => {
+    navigate(`/expense/${rowData?.row?.expense_Id}`);
+  }
   return (
     <Box sx={{ height: 400, width: '100%' }}>
       <DataGrid
         rows={tabState==='My Expenses'?rows: teamrows}
-        columns={columns}
+        columns={tabState==='My Expenses'?myExpense: teamApproval}
         initialState={{
           pagination: {
             paginationModel: {
@@ -48,9 +20,15 @@ const ExpenseGridComponent = ({rows, teamrows, tabState}) => {
             },
           },
         }}
-        pageSizeOptions={[5]}
-        checkboxSelection
+        onRowClick={handleRowClick}
+        pageSizeOptions={[10]}
+        checkboxSelection={false}
         disableRowSelectionOnClick
+        sx={{cursor: "pointer"}}
+        showCellVerticalBorder={false}
+        showColumnVerticalBorder={false}
+        columnHeaderHeight={50}
+        no
       />
     </Box>
   );

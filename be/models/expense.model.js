@@ -5,6 +5,11 @@ const expenseSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    expenseId: {
+        type: String,
+        required: true,
+        unique: true,
+    },
     purpose: {
         type: String,
         required: true,
@@ -40,6 +45,7 @@ const expenseSchema = new mongoose.Schema({
     employeeId: {
         type: String,
         required: true,
+        unique: false,
     },
     approvalManagerId: {
         type: String,
@@ -49,7 +55,8 @@ const expenseSchema = new mongoose.Schema({
         type: String,
         default: "Pending",
     },
-})
+},
+    { timestamps: true })
 
 const Expense = mongoose.model('Expense', expenseSchema);
 export default Expense;
