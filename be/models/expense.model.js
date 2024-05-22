@@ -10,6 +10,10 @@ const expenseSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    employeeName: {
+        type: String,
+        required: true,
+    },
     purpose: {
         type: String,
         required: true,
@@ -55,6 +59,10 @@ const expenseSchema = new mongoose.Schema({
         type: String,
         default: "Pending",
     },
+    stage: {
+        type: Number,
+        required: true,
+    }
 },
     { timestamps: true })
 

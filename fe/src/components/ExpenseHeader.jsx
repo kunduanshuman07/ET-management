@@ -19,7 +19,7 @@ const ExpenseHeader = ({approved, rejected, pending, tabState, setTabState}) => 
                     <Card>
                         <Box sx={{ display: "flex", flexDirection: "row", padding: "10px 30px" }}>
                             <IconButton>
-                                <RecommendIcon sx={{ fontSize: "50px", color: "#34d399" }} />
+                                <RecommendIcon sx={{ fontSize: "50px", color: "#059669" }} />
                             </IconButton>
                             <Box sx={{ display: "flex", flexDirection: "column", margin: "auto 0px", marginLeft: "auto" }}>
                                 <Typography sx={{ fontSize: "20px", color: "black", }}>

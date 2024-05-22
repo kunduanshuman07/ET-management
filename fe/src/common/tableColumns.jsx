@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import "./tableHeader.css";
 
 export const myExpense = [
@@ -83,7 +83,7 @@ export const myExpense = [
         headerAlign: "center",
         renderCell: (rowData) => (
             <div style={{ display: "flex", justifyContent: "center" }}>
-                <Typography sx={{ fontFamily: "Montserrat", margin: "15px auto", fontSize: "14px" }}>{rowData?.row?.status}</Typography>
+                <Button sx={{ fontFamily: "Montserrat", margin: "14px auto", padding: "0px 10px", backgroundColor: rowData?.row?.status === "Approved" ? "#059669" : rowData?.row?.status === "Pending" ? "#facc15" : rowData?.row?.status === "Rejected" ? "red" : "", color: "white", fontSize: "14px", textTransform: "none", borderRadius: "20px" }}>{rowData?.row?.status}</Button>
             </div>
         )
     },
@@ -186,7 +186,7 @@ export const teamApproval = [
         headerClassName: 'grid-headers',
         renderCell: (rowData) => (
             <div style={{ display: "flex", justifyContent: "center" }}>
-                <Typography sx={{ fontFamily: "Montserrat", margin: "15px auto", fontSize: "14px" }}>{rowData?.row?.status}</Typography>
+                <Button sx={{ fontFamily: "Montserrat", margin: "14px auto", padding: "0px 10px", backgroundColor: rowData?.row?.status === "Approved" ? "#059669" : rowData?.row?.status === "Pending" ? "#facc15" : rowData?.row?.status === "Rejected" ? "red" : "", color: "white", fontSize: "14px", textTransform: "none", borderRadius: "20px" }}>{rowData?.row?.status}</Button>
             </div>
         )
     },

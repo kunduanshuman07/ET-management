@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import axios from "axios";
 import { Box, Button, Grid, IconButton, Typography } from '@mui/material'
 import GppBadIcon from '@mui/icons-material/GppBad';
@@ -9,19 +9,17 @@ import ImageIcon from '@mui/icons-material/Image';
 import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
 import DetailTypographyComponent from './DetailTypographyComponent';
 import { getPayMethod, getCategoryTitle, getProjectCode, getPurpose } from "../utils/getItemDetails";
+import HistoryDialog from "./HistoryDialog";
 import { useNavigate } from 'react-router-dom';
-const ExpenseDetailCard = ({ expense }) => {
+import RejectionDialog from './RejectionDialog';
+const ExpenseDetailCard = ({ expense, expHistory }) => {
   const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
+  const [openAuditHistory, setOpenAuditHistory] = useState(false);
+  const [rejectModel, setRejectModel] = useState(false);
   const handleApprove = async () => {
-    const approvalResponse = await axios.post('http://localhost:5000/etsheet/expense/approve-expense', { expenseId: expense.expenseId });
+    const approvalResponse = await axios.post('http://localhost:5000/etsheet/expense/approve-expense', { expenseId: expense.expenseId, employeeName: user?.name });
     if (approvalResponse.status === 200) {
-      navigate('/expense');
-    }
-  }
-  const handleReject = async () => {
-    const rejectedResponse = await axios.post('http://localhost:5000/etsheet/expense/reject-expense', { expenseId: expense.expenseId });
-    if (rejectedResponse.status === 200) {
       navigate('/expense');
     }
   }
@@ -38,7 +36,7 @@ const ExpenseDetailCard = ({ expense }) => {
             <Button startIcon={<GppGoodIcon />} variant='outlined' sx={{ marginLeft: "auto", color: "#16a34a", border: "1px solid #16a34a", textTransform: "none", ":hover": { border: "1px solid #166534", color: "#166534" } }} size='small' onClick={handleApprove}>
               Approve
             </Button>
-            <Button startIcon={<GppBadIcon />} variant='outlined' sx={{ marginLeft: "10px", color: "#dc2626", border: "1px solid #dc2626", textTransform: "none", ":hover": { border: "1px solid #991b1b", color: "#991b1b" } }} size='small' onClick={handleReject}>
+            <Button startIcon={<GppBadIcon />} variant='outlined' sx={{ marginLeft: "10px", color: "#dc2626", border: "1px solid #dc2626", textTransform: "none", ":hover": { border: "1px solid #991b1b", color: "#991b1b" } }} size='small' onClick={() => setRejectModel(true)}>
               Reject
             </Button>
           </Box>
@@ -59,7 +57,7 @@ const ExpenseDetailCard = ({ expense }) => {
             <Typography variant='h5' sx={{ fontFamily: "Montserrat", fontWeight: "500" }}>
               Expense Detail
             </Typography>
-            <Button sx={{ textDecoration: "underline", textTransform: "none", marginLeft: "auto", marginRight: "20px", fontFamily: "Montserrat", fontWeight: "500" }}>
+            <Button sx={{ textDecoration: "underline", textTransform: "none", marginLeft: "auto", marginRight: "20px", fontFamily: "Montserrat", fontWeight: "500" }} onClick={() => setOpenAuditHistory(true)}>
               Audit History
             </Button>
           </Box>
@@ -114,6 +112,8 @@ const ExpenseDetailCard = ({ expense }) => {
           </Box>
         </Grid>
       </Grid>
+      {openAuditHistory && <HistoryDialog open={openAuditHistory} setOpen={setOpenAuditHistory} expHistory={expHistory} />}
+      {rejectModel && <RejectionDialog open={rejectModel} setOpen={setRejectModel} expenseId={expense?.expenseId}/>}
     </div>
   )
 }

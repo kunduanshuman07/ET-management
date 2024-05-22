@@ -90,7 +90,7 @@ const AddNewExpensePage = ({ details }) => {
     const handleEditExpense = async () => {
         try {
             setLoading(true);
-            const expenseResponse = await axios.post('http://localhost:5000/etsheet/expense/update-expense', { expenseId: details?.expenseId, name: expenseName, purpose: purposeData, category: categoryData, invDate: invoiceDate, currency: currencyType, bill: billAmount, claim: claimAmount, paymethod: paymentType, projectCode: user?.projectCode, status: "Pending" });
+            const expenseResponse = await axios.post('http://localhost:5000/etsheet/expense/update-expense', { expenseId: details?.expenseId, name: expenseName, purpose: purposeData, category: categoryData, invDate: invoiceDate, currency: currencyType, bill: billAmount, claim: claimAmount, paymethod: paymentType, projectCode: user?.projectCode, status: "Pending", employeeName: user?.name });
             if (expenseResponse.status === 200) {
                 navigate('/expense');
             }
@@ -103,7 +103,7 @@ const AddNewExpensePage = ({ details }) => {
     const handleAddExpense = async() => {
         try {
             setLoading(true);
-            const expenseResponse = await axios.post('http://localhost:5000/etsheet/expense/add-expense', { name: expenseName, purpose: purposeData, category: categoryData, invDate: invoiceDate, currency: currencyType, bill: billAmount, claim: claimAmount, paymethod: paymentType, projectCode: user?.projectCode, employeeId: user?.employeeId, approvalManagerId: user?.managerId });
+            const expenseResponse = await axios.post('http://localhost:5000/etsheet/expense/add-expense', { name: expenseName, purpose: purposeData, category: categoryData, invDate: invoiceDate, currency: currencyType, bill: billAmount, claim: claimAmount, paymethod: paymentType, projectCode: user?.projectCode, employeeId: user?.employeeId, approvalManagerId: user?.managerId, employeeName: user?.name });
             if (expenseResponse.status === 200) {
                 navigate('/expense');
             }
